@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Benchmark</title>
+        @vite('resources/js/app.ts')
         @vite('resources/css/app.css')
     </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
