@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+    php:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - "8080:80"
+        - "8000:8000"
+      volumes:
+        - ./:/var/www/html
+      environment:
+        - "APP_ENV=local"
+        - "APP_DEBUG=true"
+
