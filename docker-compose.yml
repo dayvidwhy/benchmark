@@ -7,9 +7,12 @@ services:
         dockerfile: Dockerfile
       ports:
         - "8080:80"
+        - "5173:5173"
         - "8000:8000"
       volumes:
         - ./:/var/www/html
+        - /var/www/html/node_modules
+        - /var/www/html/vendor
       environment:
         - "APP_ENV=local"
         - "APP_DEBUG=true"

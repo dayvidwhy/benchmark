@@ -21,16 +21,17 @@ RUN apt-get update && apt-get install -y \
 
 # Set working directory and copy the project
 WORKDIR /var/www/html
-COPY . /var/www/html
+COPY . .
 
 # Install dependencies
-RUN composer install --no-interaction
+RUN composer install
 RUN npm install
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html
 
 EXPOSE 80
+EXPOSE 5173
 EXPOSE 8000
 
 # Start Apache in the foreground
