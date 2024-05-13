@@ -5,6 +5,8 @@
       "lib": ["ESNext"],
       "target": "es2020",
       "module": "esnext",
+      "noImplicitAny": true,
+      "strict": true,
       "moduleResolution": "node",
       "esModuleInterop": true,
       "types": ["node", "vite/client"],

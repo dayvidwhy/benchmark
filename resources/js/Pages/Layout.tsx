@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "@inertiajs/react";
 
-export default function Layout({ children }) {
+type LayoutProps = {
+    children: React.ReactNode;
+}
+
+export default function Layout({ children }: LayoutProps) {
     return (
         <main>
             <header>
