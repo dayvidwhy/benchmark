@@ -4,9 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+    return Inertia::render('HomePage');
 });
 
 Route::get('/survey', function () {
-    return Inertia::render('Survey');
+    return Inertia::render('SurveyPage');
 });

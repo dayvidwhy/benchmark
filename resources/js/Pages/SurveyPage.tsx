@@ -1,8 +1,8 @@
 import React from "react";
-import Layout from "./Layout";
+import Layout from "../Layouts/Layout";
 import { Head } from "@inertiajs/react";
 
-export default function Survey() {
+export default function SurveyPage() {
     return (
         <Layout>
             <Head title="Survey" />
