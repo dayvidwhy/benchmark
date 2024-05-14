@@ -29,6 +29,23 @@ docker-compose up --build
 
 To access the application, open your web browser and navigate to `localhost:8000`.
 
+## Useful commands
+
+```bash
+# list routes provided by the app
+php artisan route:list --except-vendor
+
+# create a new model with migration
+php artisan make:model Survey -m
+
+# view the database
+php artisan db:show
+
+# migrate teh database
+php artisan migrate
+```
+
+
 ## VSCode Integration
 For an optimized development experience, attach VSCode to the running app container:
 

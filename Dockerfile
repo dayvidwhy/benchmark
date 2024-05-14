@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     default-mysql-client && \
     a2enmod rewrite && \
-    docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+    docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip intl
 
 # Set working directory and copy the project
 WORKDIR /var/www/html
