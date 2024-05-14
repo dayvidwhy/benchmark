@@ -41,8 +41,11 @@ php artisan make:model Survey -m
 # view the database
 php artisan db:show
 
-# migrate teh database
+# migrate the database
 php artisan migrate
+
+# rollback the last migration
+php artisan migrate:rollback
 ```
 
 
