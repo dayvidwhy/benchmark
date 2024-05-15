@@ -14,7 +14,8 @@ Route::get('/survey', function () {
     ]);
 });
 
-Route::get('/survey/{id}', function () {
-    
-    return Inertia::render('SurveyPage');
+Route::get('/survey/{id}', function ($id) {
+    return Inertia::render('SurveyViewPage', [
+        'survey' => Survey::find($id)
+    ]);
 });

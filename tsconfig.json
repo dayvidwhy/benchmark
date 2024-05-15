@@ -2,7 +2,7 @@
   "exclude": ["node_modules"], // Exclude the reload package
   "compilerOptions": {
       "jsx": "react",
-      "lib": ["ESNext"],
+      "lib": ["DOM", "ESNext"],
       "target": "es2020",
       "module": "esnext",
       "noImplicitAny": true,
