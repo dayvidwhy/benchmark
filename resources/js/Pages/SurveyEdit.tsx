@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Layout from "../Layouts/Layout";
 import { Head } from "@inertiajs/react";
 import axios from "axios";
@@ -37,14 +37,24 @@ const questionTypes: Questions[] = [
 
 // Add the SurveyEdit component 
 export default function SurveyEdit({ survey }: { survey: Survey}) {
-    console.log(survey.questions);
-    const [questions, setQuestions] = useState<SelectedQuestions[]>(survey.questions || []);
+    const [questions, setQuestions] = useState<SelectedQuestions[]>([...survey.questions || []]);
     const [surveyTitle, setSurveyTitle] = useState<string>(survey.title);
+
+    const handleQuestionMove = useCallback((index: number, direction: "up" | "down") => {
+        setQuestions(prevQuestions => {
+            const newQuestions = [...prevQuestions];
+            const targetIndex = direction === "up" ? index - 1 : index + 1;
+            if (targetIndex < 0 || targetIndex >= newQuestions.length) return newQuestions;
+
+            const [movedQuestion] = newQuestions.splice(index, 1);
+            newQuestions.splice(targetIndex, 0, movedQuestion);
+            return newQuestions;
+        });
+    }, []);
 
     const saveSurvey = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log({ surveyTitle, questions });
-        const response = await axios({
+        await axios({
             method: "put",
             url: `/api/surveys/${survey.id}`,
             data: {
@@ -54,8 +64,6 @@ export default function SurveyEdit({ survey }: { survey: Survey}) {
                 }
             }
         });
-
-        console.log(response);
     };
 
     return (
@@ -102,7 +110,7 @@ export default function SurveyEdit({ survey }: { survey: Survey}) {
                     {questions.map((question, index) => (
                         <div key={index} className="bg-slate-100 p-2 mb-2 rounded flex w-full justify-between">
                             <div className="flex-1 pr-2">
-                                <span className="text-sm text-slate-600">{question.questionType}</span>
+                                <span className="text-sm px-2 text-slate-600">{question.questionType}</span>
                                 <input
                                     type="text"
                                     value={question.label || ""}
@@ -133,31 +141,22 @@ export default function SurveyEdit({ survey }: { survey: Survey}) {
                                         newQuestions.splice(index, 1);
                                         setQuestions(newQuestions);
                                     }}
+                                    type="button"
                                     className="bg-red-500 hover:bg-red-400 text-white py-1 px-2 rounded-sm mb-2 text-sm">
                                     Remove
                                 </button>
                                 <button
-                                    onClick={() => {
-                                        if (index === 0) return;
-                                        const newQuestions = [...questions];
-                                        const temp = newQuestions[index - 1];
-                                        newQuestions[index - 1] = newQuestions[index];
-                                        newQuestions[index] = temp;
-                                        setQuestions(newQuestions);
-                                    }}
-                                    className="bg-slate-600 hover:bg-slate-500 text-slate-200 py-1 px-2 mb-2 rounded-sm text-sm">
+                                    type="button"
+                                    onClick={() => handleQuestionMove(index, "up")}
+                                    className="bg-slate-600 hover:bg-slate-500 text-slate-200 py-1 px-2 mb-2 rounded-sm text-sm"
+                                >
                                     Up
                                 </button>
                                 <button
-                                    onClick={() => {
-                                        if (index === questions.length - 1) return;
-                                        const newQuestions = [...questions];
-                                        const temp = newQuestions[index + 1];
-                                        newQuestions[index + 1] = newQuestions[index];
-                                        newQuestions[index] = temp;
-                                        setQuestions(newQuestions);
-                                    }}
-                                    className="bg-slate-600 hover:bg-slate-500 text-slate-200 py-1 px-2 mb-2 rounded-sm text-sm">
+                                    type="button"
+                                    onClick={() => handleQuestionMove(index, "down")}
+                                    className="bg-slate-600 hover:bg-slate-500 text-slate-200 py-1 px-2 mb-2 rounded-sm text-sm"
+                                >
                                     Down
                                 </button>
                             </div>
