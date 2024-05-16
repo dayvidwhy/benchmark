@@ -46,6 +46,9 @@ php artisan migrate
 
 # rollback the last migration
 php artisan migrate:rollback
+
+# create a migration
+php artisan make:migration [useful_migration_name]
 ```
 
 

@@ -5,17 +5,23 @@ use App\Models\Survey;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('HomePage');
+    return Inertia::render('Home');
 });
 
 Route::get('/survey', function () {
-    return Inertia::render('SurveyPage', [
+    return Inertia::render('SurveyList', [
         'surveys' => Survey::all()
     ]);
 });
 
 Route::get('/survey/{id}', function ($id) {
-    return Inertia::render('SurveyViewPage', [
+    return Inertia::render('SurveyView', [
+        'survey' => Survey::find($id)
+    ]);
+});
+
+Route::get('/survey/{id}/edit', function ($id) {
+    return Inertia::render('SurveyEdit', [
         'survey' => Survey::find($id)
     ]);
 });

@@ -16,4 +16,8 @@ class Survey extends Model
     protected $fillable = [
         'title'
     ];
+    
+    protected $casts = [
+        'questions' => 'array'
+    ];
 }

@@ -11,7 +11,18 @@ class SurveyController extends Controller
      * Display a listing of the resource.
      */
     public function get() {
-        return Survey::all();
+        try {
+            $surveys = Survey::all();
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to retrieve surveys'
+            ], 500);
+        }
+        return response()->json([
+            'status' => 'success',
+            'data' => $surveys
+        ]);
     }
 
     /**
@@ -40,7 +51,7 @@ class SurveyController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Survey creation failed'
-            ]);
+            ], 500);
         }
 
         return response()->json([
@@ -57,14 +68,14 @@ class SurveyController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Survey ID not provided'
-            ]);
+            ], 400);
         }
 
         if (!is_string($id)) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Survey ID must be a string'
-            ]);
+            ], 400);
         }
 
         try { 
@@ -73,26 +84,66 @@ class SurveyController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Survey not found'
-            ]);
+            ], 404);
         }
-        return $survey;
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $survey
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id) {
-        $survey = Survey::findOrFail($id);
-        $survey->update($request->all());
-        return $survey;
+        try {
+            $validatedData = $request->validate([
+                'survey.title' => 'required',
+                'survey.questions' => 'required'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Survey title and questions are required'
+            ], 400);
+        }
+
+        try {
+            $survey = Survey::findOrFail($id);
+            $survey->title = $validatedData['survey']['title'];
+            $survey->questions = $validatedData['survey']['questions'];
+            $survey->save();
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Survey update failed'
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Survey updated successfully'
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id) {
-        $survey = Survey::findOrFail($id);
-        $survey->delete();
-        return $survey;
+        try {
+            $survey = Survey::findOrFail($id);
+            $survey->delete();
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Survey deletion failed'
+            ], 500);
+        }
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Survey deleted successfully'
+        ]);
     }
 }

@@ -11,14 +11,7 @@ export default function Layout({ children }: LayoutProps) {
             <Navigation />
             <div className="flex-1 overflow-hidden">
                 <div className="flex flex-row h-full">
-                    <div className="w-48 overflow-y-auto bg-slate-700 border-r border-slate-600 text-slate-300">
-                        <div className="my-1 flex justify-between align-middle p-2">
-                            Sidebar
-                        </div>
-                    </div>
-                    <div className="flex-1 overflow-auto">
-                        {children}
-                    </div>
+                    {children}
                 </div>
             </div>
             <div className="flex justify-center py-2 bg-slate-50 border-t border-slate-400">
