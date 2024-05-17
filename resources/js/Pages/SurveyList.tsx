@@ -74,24 +74,25 @@ export default function SurveyList({ surveys }: { surveys: Survey[] }) {
                                 <Link
                                     href={`/survey/${survey.id}/edit`}
                                     className="
-                                        text-slate-700 p-1
+                                        text-slate-500 p-1
                                         inline-block
-                                        rounded
-                                        border border-slate-400
+                                        rounded w-16
+                                        text-center
+                                        border border-slate-300
                                         hover:bg-slate-400 hover:text-slate-50
                                         transition
                                         cursor-pointer
                                     "
                                 >
-                                    Details
+                                    Edit
                                 </Link>
                                 <button
                                     type="button"
                                     className="
-                                        text-slate-700 p-1 ml-2
-                                        rounded
+                                        text-slate-500 p-1 ml-2
+                                        rounded w-16
                                         inline-block
-                                        border border-slate-400
+                                        border border-slate-300
                                         hover:bg-slate-400 hover:text-slate-50
                                         transition
                                         cursor-pointer

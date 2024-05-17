@@ -42,6 +42,7 @@ const availableQuestions: Questions[] = [
 export default function SurveyEdit({ survey, questions }: { survey: Survey, questions: SelectedQuestions[]}) {
     const [selectedQuestions, setSelectedQuestions] = useState<SelectedQuestions[]>([...questions || []]);
     const [surveyTitle, setSurveyTitle] = useState<string>(survey.title);
+    const [savePending, setSavePending] = useState<boolean>(false);
 
     const handleQuestionMove = useCallback((index: number, direction: "up" | "down") => {
         setSelectedQuestions(prevQuestions => {
@@ -57,6 +58,7 @@ export default function SurveyEdit({ survey, questions }: { survey: Survey, ques
 
     const saveSurvey = async (e: React.FormEvent) => {
         e.preventDefault();
+        setSavePending(true);
         await axios({
             method: "put",
             url: `/api/surveys/${survey.id}`,
@@ -67,6 +69,7 @@ export default function SurveyEdit({ survey, questions }: { survey: Survey, ques
                 }
             }
         });
+        setSavePending(false);
     };
 
     return (
@@ -97,6 +100,7 @@ export default function SurveyEdit({ survey, questions }: { survey: Survey, ques
                     <input
                         type="submit"
                         value="Save"
+                        disabled={savePending}
                         className="
                             border border-slate-300
                             text-slate-600 
