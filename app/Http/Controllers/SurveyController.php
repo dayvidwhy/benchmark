@@ -114,8 +114,11 @@ class SurveyController extends Controller
             $survey->title = $validatedData['survey']['title'];
             $survey->save();
 
+            // Fetch existing questions, as we insert, tick them off
+            // Remaining questions would have been deleted in the UI
+            $existingQuestions = $survey->questions()->get();
+
             // Then update or create the questions
-            echo json_encode($validatedData['survey']['questions']);
             foreach ($validatedData['survey']['questions'] as $index=>$question) {
                 if ($question['id'] === null) {
                     $survey->questions()->create([
@@ -134,6 +137,16 @@ class SurveyController extends Controller
                     'description' => $question['description'],
                     'order' => $index,
                 ]);
+
+                // remove the question from the existing questions
+                $existingQuestions = $existingQuestions->filter(function ($existingQuestion) use ($question) {
+                    return $existingQuestion->id !== $question['id'];
+                });
+            }
+
+            // if there's leftover questions, delete them
+            foreach ($existingQuestions as $existingQuestion) {
+                $existingQuestion->delete();
             }
         } catch (\Exception $e) {
             return response()->json([
