@@ -19,8 +19,8 @@ return new class extends Migration
 
         Schema::create('questions', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('label');
-            $table->string('questionType');
+            $table->string('label')->nullable();;
+            $table->string('questionType')->nullable();;
             $table->text('description')->nullable();
             $table->integer('order');
             $table->uuid('survey_id');
