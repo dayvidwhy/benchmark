@@ -54,7 +54,9 @@ class SurveyController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Survey created successfully'
+            'message' => 'Survey created successfully',
+            'survey_id' => $survey->id,
+            'survey_title' => $survey->title
         ]);
     }
 
@@ -98,7 +100,7 @@ class SurveyController extends Controller
         try {
             $validatedData = $request->validate([
                 'survey.title' => 'required',
-                'survey.questions' => 'required'
+                'survey.questions' => 'sometimes'
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -113,6 +115,7 @@ class SurveyController extends Controller
             $survey->save();
 
             // Then update or create the questions
+            echo json_encode($validatedData['survey']['questions']);
             foreach ($validatedData['survey']['questions'] as $index=>$question) {
                 if ($question['id'] === null) {
                     $survey->questions()->create([
