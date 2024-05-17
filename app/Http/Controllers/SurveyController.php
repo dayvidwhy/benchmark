@@ -29,7 +29,6 @@ class SurveyController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
-
         try {
             $validatedData = $request->validate([
                 'survey.title' => 'required',
@@ -47,7 +46,6 @@ class SurveyController extends Controller
             $survey->title = $validatedData['survey']['title'];
             $survey->save();
         } catch (\Exception $e) {
-            echo $e->getMessage();
             return response()->json([
                 'status' => 'error',
                 'message' => 'Survey creation failed'
@@ -112,12 +110,32 @@ class SurveyController extends Controller
         try {
             $survey = Survey::findOrFail($id);
             $survey->title = $validatedData['survey']['title'];
-            $survey->questions = $validatedData['survey']['questions'];
             $survey->save();
+
+            // Then update or create the questions
+            foreach ($validatedData['survey']['questions'] as $index=>$question) {
+                if ($question['id'] === null) {
+                    $survey->questions()->create([
+                        'label' => $question['label'],
+                        'questionType' => $question['questionType'],
+                        'description' => $question['description'],
+                        'order' => $index,
+                    ]);
+                    continue;
+                }
+                
+                // otherwise get the entry and update it
+                $survey->questions()->where('id', $question['id'])->update([
+                    'label' => $question['label'],
+                    'questionType' => $question['questionType'],
+                    'description' => $question['description'],
+                    'order' => $index,
+                ]);
+            }
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Survey update failed'
+                'message' => 'Survey update failed'. $e->getMessage()
             ], 500);
         }
 

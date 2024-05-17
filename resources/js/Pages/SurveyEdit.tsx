@@ -7,7 +7,10 @@ type SelectedQuestions = {
     label: string;
     questionType: string;
     description: string;
-    type: string;
+     // This is the id of the question in the database
+     // New questions start off with this being null
+     // We let the server provide an ID when saving the question
+    id: string | null;
 };
 
 type Survey = {
@@ -17,31 +20,31 @@ type Survey = {
 };
 
 type Questions = {
-    id: number;
-    name: string;
-    type: string;
+    localId: number;
+    questionDisplayName: string;
+    questionType: string;
 };
 
-const questionTypes: Questions[] = [
+const availableQuestions: Questions[] = [
     {
-        id: 1,
-        name: "Text",
-        type: "text"
+        localId: 1,
+        questionDisplayName: "Text",
+        questionType: "text"
     },
     {
-        id: 2,
-        name: "Long Text",
-        type: "long_text"
+        localId: 2,
+        questionDisplayName: "Long Text",
+        questionType: "long_text"
     }
 ];
 
 // Add the SurveyEdit component 
-export default function SurveyEdit({ survey }: { survey: Survey}) {
-    const [questions, setQuestions] = useState<SelectedQuestions[]>([...survey.questions || []]);
+export default function SurveyEdit({ survey, questions }: { survey: Survey, questions: SelectedQuestions[]}) {
+    const [selectedQuestions, setSelectedQuestions] = useState<SelectedQuestions[]>([...questions || []]);
     const [surveyTitle, setSurveyTitle] = useState<string>(survey.title);
 
     const handleQuestionMove = useCallback((index: number, direction: "up" | "down") => {
-        setQuestions(prevQuestions => {
+        setSelectedQuestions(prevQuestions => {
             const newQuestions = [...prevQuestions];
             const targetIndex = direction === "up" ? index - 1 : index + 1;
             if (targetIndex < 0 || targetIndex >= newQuestions.length) return newQuestions;
@@ -60,7 +63,7 @@ export default function SurveyEdit({ survey }: { survey: Survey}) {
             data: {
                 survey: {
                     title: surveyTitle,
-                    questions
+                    questions: selectedQuestions
                 }
             }
         });
@@ -73,17 +76,17 @@ export default function SurveyEdit({ survey }: { survey: Survey}) {
                 <div className="my-1 flex flex-col justify-between align-middle p-2">
                     <h1 className="text-sm mb-2">Question Types</h1>
                     <div className="flex flex-col">
-                        {questionTypes.map((questionType) => (
+                        {availableQuestions.map((availableQuestion) => (
                             <button
-                                key={questionType.id}
-                                onClick={() => setQuestions([...questions, {
+                                key={availableQuestion.localId}
+                                onClick={() => setSelectedQuestions([...selectedQuestions, {
                                     label: "",
                                     description: "",
-                                    questionType: questionType.name,
-                                    type: questionType.type
+                                    questionType: availableQuestion.questionType,
+                                    id: null
                                 }])}
                                 className="bg-slate-600 hover:bg-slate-500 text-slate-200 mb-2 py-1 px-2 rounded-sm text-left">
-                                {questionType.name}
+                                {availableQuestion.questionDisplayName}
                             </button>
                         ))}
                     </div>
@@ -107,17 +110,24 @@ export default function SurveyEdit({ survey }: { survey: Survey}) {
                         onChange={(e) => setSurveyTitle(e.target.value)}
                         className="w-full p-2 mb-4 bg-inherit text-2xl"
                     />
-                    {questions.map((question, index) => (
+                    {selectedQuestions.map((question, index) => (
                         <div key={index} className="bg-slate-100 p-2 mb-2 rounded flex w-full justify-between">
                             <div className="flex-1 pr-2">
-                                <span className="text-sm px-2 text-slate-600">{question.questionType}</span>
+                                <span className="text-sm px-2 text-slate-600">
+                                    {(() => {
+                                        const matchingQuestion = availableQuestions.find((availableQuestion) => {
+                                            return availableQuestion.questionType === question.questionType;
+                                        });
+                                        return matchingQuestion?.questionDisplayName || "Unknown";
+                                    })()}
+                                </span>
                                 <input
                                     type="text"
                                     value={question.label || ""}
                                     onChange={(e) => {
-                                        const newQuestions = [...questions];
+                                        const newQuestions = [...selectedQuestions];
                                         newQuestions[index].label = e.target.value;
-                                        setQuestions(newQuestions);
+                                        setSelectedQuestions(newQuestions);
                                     }}
                                     placeholder="Question label"
                                     className="w-full px-2 mb-2 bg-inherit text-md font-bold"
@@ -126,9 +136,9 @@ export default function SurveyEdit({ survey }: { survey: Survey}) {
                                     type="text"
                                     value={question.description || ""}
                                     onChange={(e) => {
-                                        const newQuestions = [...questions];
+                                        const newQuestions = [...selectedQuestions];
                                         newQuestions[index].description = e.target.value;
-                                        setQuestions(newQuestions);
+                                        setSelectedQuestions(newQuestions);
                                     }}
                                     placeholder="Description"
                                     className="w-full px-2 mb-2 bg-inherit text-sm text-slate-600"    
@@ -137,9 +147,9 @@ export default function SurveyEdit({ survey }: { survey: Survey}) {
                             <div className="flex flex-col w-20 text-center">
                                 <button 
                                     onClick={() => {
-                                        const newQuestions = [...questions];
+                                        const newQuestions = [...selectedQuestions];
                                         newQuestions.splice(index, 1);
-                                        setQuestions(newQuestions);
+                                        setSelectedQuestions(newQuestions);
                                     }}
                                     type="button"
                                     className="bg-red-500 hover:bg-red-400 text-white py-1 px-2 rounded-sm mb-2 text-sm">

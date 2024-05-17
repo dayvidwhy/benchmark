@@ -15,13 +15,17 @@ Route::get('/survey', function () {
 });
 
 Route::get('/survey/{id}', function ($id) {
+    $survey = Survey::find($id);
     return Inertia::render('SurveyView', [
-        'survey' => Survey::find($id)
+        'survey' => $survey,
+        'questions' => $survey->questions()->orderBy('order')->get()
     ]);
 });
 
 Route::get('/survey/{id}/edit', function ($id) {
+    $survey = Survey::find($id);
     return Inertia::render('SurveyEdit', [
-        'survey' => Survey::find($id)
+        'survey' => $survey,
+        'questions' => $survey->questions()->orderBy('order')->get()
     ]);
 });
