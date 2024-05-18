@@ -16,7 +16,7 @@ export default function Register() {
             <div className="flex-1 overflow-auto">
                 <div className="w-full p-4 bg-slate-100 h-full">
                     <div className="flex flex-col items-center justify-center h-full">
-                        <form method="post" action="/api/users">
+                        <form method="post" action="/users">
                             <input type="hidden" name="_token" value={csrf_token as string} />
                             <h1 className="text-2xl text-slate-800 text-center mb-2">Register</h1>
                             <div className="flex flex-col w-96">

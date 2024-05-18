@@ -62,7 +62,7 @@ export default function SurveyEdit({ survey, questions }: { survey: Survey, ques
         setSavePending(true);
         await axios({
             method: "put",
-            url: `/api/surveys/${survey.id}`,
+            url: `/surveys/${survey.id}`,
             data: {
                 survey: {
                     title: surveyTitle,

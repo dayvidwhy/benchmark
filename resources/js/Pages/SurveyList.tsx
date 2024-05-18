@@ -16,7 +16,7 @@ export default function SurveyList({ surveys }: { surveys: Survey[] }) {
     const deleteSurvey = async (surveyId: number) => {
         await axios({
             method: "delete",
-            url: `/api/surveys/${surveyId}`
+            url: `/surveys/${surveyId}`
         });
 
         setSurveyList(surveyList.filter((s) => s.id !== surveyId));
@@ -28,7 +28,7 @@ export default function SurveyList({ surveys }: { surveys: Survey[] }) {
         try {
             createSurveyResponse = await axios({
                 method: "post",
-                url: "/api/surveys",
+                url: "/surveys",
                 data: {
                     survey: {
                         title: "New Survey"
