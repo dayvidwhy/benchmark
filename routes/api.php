@@ -13,12 +13,14 @@ Route::controller(UserController::class)->group(function () {
     Route::delete('/users/{id}', 'destroy');
 });
 
-Route::controller(SurveyController::class)->group(function () {
-    Route::get('/surveys', 'get');
-    Route::post('/surveys', 'store');
-    Route::get('/surveys/{id}', 'show');
-    Route::put('/surveys/{id}', 'update');
-    Route::delete('/surveys/{id}', 'destroy');
+Route::group(['middleware' => ['web', 'auth']], function () {
+    Route::controller(SurveyController::class)->group(function () {
+        Route::get('/surveys', 'get');
+        Route::post('/surveys', 'store');
+        Route::get('/surveys/{id}', 'show');
+        Route::put('/surveys/{id}', 'update');
+        Route::delete('/surveys/{id}', 'destroy');
+    });
 });
 
 Route::get('/user', function (Request $request) {

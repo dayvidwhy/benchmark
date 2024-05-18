@@ -11,6 +11,6 @@
       "esModuleInterop": true,
       "types": ["node", "vite/client"],
       "strictNullChecks": true,
-      "baseUrl": ".",
+      "baseUrl": "."
   }
 }

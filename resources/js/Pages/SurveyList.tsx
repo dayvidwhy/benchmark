@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Layout from "../Layouts/Layout";
-import { Head, Link } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
+import { Link } from "../Components/Link";
+import { Button } from "../Components/Button";
 import axios from "axios";
 
 export type Survey = {
@@ -49,11 +51,12 @@ export default function SurveyList({ surveys }: { surveys: Survey[] }) {
             <Head title="Survey" />
             <div className="w-48 overflow-y-auto bg-slate-700 border-r border-slate-600 text-slate-300">
                 <div className="my-1 flex justify-between align-middle p-2">
-                    <button
+                    <Button
+                        type="primary"
                         onClick={createSurvey}
-                        className="w-full bg-slate-600 hover:bg-slate-500 text-slate-200 mb-2 py-1 px-2 rounded-sm text-left">
-                        Create Survey
-                    </button>
+                        text="Create Survey"
+                        classes={["w-full"]}
+                    />
                 </div>
             </div>
             <div className="flex-1 overflow-auto">
@@ -72,35 +75,17 @@ export default function SurveyList({ surveys }: { surveys: Survey[] }) {
                             <span>{survey.title}</span>
                             <div>
                                 <Link
-                                    href={`/survey/${survey.id}/edit`}
-                                    className="
-                                        text-slate-500 p-1
-                                        inline-block
-                                        rounded w-16
-                                        text-center
-                                        border border-slate-300
-                                        hover:bg-slate-400 hover:text-slate-50
-                                        transition
-                                        cursor-pointer
-                                    "
-                                >
-                                    Edit
-                                </Link>
-                                <button
-                                    type="button"
-                                    className="
-                                        text-slate-500 p-1 ml-2
-                                        rounded w-16
-                                        inline-block
-                                        border border-slate-300
-                                        hover:bg-slate-400 hover:text-slate-50
-                                        transition
-                                        cursor-pointer
-                                    "
+                                    classes={["w-16"]}
+                                    type="secondary"
+                                    to={`/survey/${survey.id}/edit`}
+                                    text="Edit"
+                                />
+                                <Button
+                                    classes={["w-16"]}
+                                    type="danger"
                                     onClick={() => deleteSurvey(survey.id)}
-                                >
-                                    Delete
-                                </button>
+                                    text="Remove"
+                                />
                             </div>
                         </div>
                     ))}

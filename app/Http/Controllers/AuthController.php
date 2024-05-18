@@ -29,6 +29,9 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
+    /**
+     * Handle logging the user out.
+     */
     public function logout(Request $request): RedirectResponse
     {
         Auth::logout();

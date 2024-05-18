@@ -1,10 +1,10 @@
 import React from "react";
 import Layout from "../Layouts/Layout";
-import { Head, usePage } from "@inertiajs/react";
+import { Head, usePage, Link } from "@inertiajs/react";
 
 export default function Login() {
-    const { csrf_token } = usePage().props;
-
+    const { csrf_token, errors } = usePage().props;
+    
     return (
         <Layout>
             <Head title="Login" />
@@ -28,6 +28,12 @@ export default function Login() {
                                 <input name="password" type="password" id="password" className="p-2 border border-slate-300 rounded" />
                             </div>
                             <button className="bg-slate-800 text-slate-50 p-2 rounded w-96 mt-4">Login</button>
+                            <Link href="/register" className="text-slate-600 mt-2 block">Need an account? Register</Link>
+                            { errors.email && (
+                                <p className="text-red-600 mt-2 block">
+                                    {errors.email}
+                                </p>
+                            )}
                         </form>
                     </div>
                 </div>

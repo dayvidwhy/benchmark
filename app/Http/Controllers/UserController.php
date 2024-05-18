@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -19,9 +20,29 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        return User::create($request->all());
+        try {
+            $validDetails = $request->validate([
+                'name' => ['required'],
+                'email' => ['required', 'email'],
+                'password' => ['required']
+            ]);
+
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'message' => 'Please provide all fields.'
+            ]);
+        }
+
+        try {
+            User::create($validDetails);
+            return redirect()->intended('/login');
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'message' => 'Something went wrong registering.'
+            ]);
+        }
     }
 
     /**

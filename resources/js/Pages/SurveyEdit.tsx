@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import Layout from "../Layouts/Layout";
 import { Head } from "@inertiajs/react";
+import { Button } from "../Components/Button";
 import axios from "axios";
 
 type SelectedQuestions = {
@@ -80,7 +81,7 @@ export default function SurveyEdit({ survey, questions }: { survey: Survey, ques
                     <h1 className="text-sm mb-2">Question Types</h1>
                     <div className="flex flex-col">
                         {availableQuestions.map((availableQuestion) => (
-                            <button
+                            <Button
                                 key={availableQuestion.localId}
                                 onClick={() => setSelectedQuestions([...selectedQuestions, {
                                     label: "",
@@ -88,9 +89,10 @@ export default function SurveyEdit({ survey, questions }: { survey: Survey, ques
                                     questionType: availableQuestion.questionType,
                                     id: null
                                 }])}
-                                className="bg-slate-600 hover:bg-slate-500 text-slate-200 mb-2 py-1 px-2 rounded-sm text-left">
-                                {availableQuestion.questionDisplayName}
-                            </button>
+                                classes={["mb-2"]}
+                                type="primary"
+                                text={availableQuestion.questionDisplayName}
+                            />
                         ))}
                     </div>
                 </div>
@@ -148,31 +150,29 @@ export default function SurveyEdit({ survey, questions }: { survey: Survey, ques
                                     className="w-full px-2 mb-2 bg-inherit text-sm text-slate-600"    
                                 />
                             </div>
-                            <div className="flex flex-col w-20 text-center">
-                                <button 
+                            <div className="flex flex-col w-20 text-center mr-2">
+                                <Button 
                                     onClick={() => {
                                         const newQuestions = [...selectedQuestions];
                                         newQuestions.splice(index, 1);
                                         setSelectedQuestions(newQuestions);
                                     }}
-                                    type="button"
-                                    className="bg-red-500 hover:bg-red-400 text-white py-1 px-2 rounded-sm mb-2 text-sm">
-                                    Remove
-                                </button>
-                                <button
-                                    type="button"
+                                    type="danger"
+                                    text="Remove"
+                                    classes={["w-full", "mb-1"]}
+                                />
+                                <Button
+                                    type="tertiary"
+                                    text="Up"
                                     onClick={() => handleQuestionMove(index, "up")}
-                                    className="bg-slate-600 hover:bg-slate-500 text-slate-200 py-1 px-2 mb-2 rounded-sm text-sm"
-                                >
-                                    Up
-                                </button>
-                                <button
-                                    type="button"
+                                    classes={["w-full", "mb-1"]}
+                                />
+                                <Button
+                                    type="tertiary"
+                                    text="Down"
                                     onClick={() => handleQuestionMove(index, "down")}
-                                    className="bg-slate-600 hover:bg-slate-500 text-slate-200 py-1 px-2 mb-2 rounded-sm text-sm"
-                                >
-                                    Down
-                                </button>
+                                    classes={["w-full", "mb-1"]}
+                                />
                             </div>
                         </div>
                     ))}
