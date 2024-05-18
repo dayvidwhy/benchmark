@@ -51,6 +51,17 @@ php artisan migrate:rollback
 php artisan make:migration [useful_migration_name]
 ```
 
+If you want to inspect a particular table;
+
+```bash
+# Start the php CLI
+php artisan tinker
+```
+
+```php
+// View the user table
+$table = App\Models\User::all();
+```
 
 ## VSCode Integration
 For an optimized development experience, attach VSCode to the running app container:

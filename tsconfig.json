@@ -1,5 +1,5 @@
 {
-  "exclude": ["node_modules"], // Exclude the reload package
+  "exclude": ["node_modules"],
   "compilerOptions": {
       "jsx": "react",
       "lib": ["DOM", "ESNext"],
@@ -11,6 +11,6 @@
       "esModuleInterop": true,
       "types": ["node", "vite/client"],
       "strictNullChecks": true,
-      "baseUrl": ".", // If your base URL is set differently, it might affect path resolution
+      "baseUrl": ".",
   }
 }
